@@ -23,7 +23,7 @@
 
         [TestMethod]
         public void Wyplata_Brak_Srodkow()
-        { 
+        {
             Konto konto = new Konto("Jan Kowalski", 100);
             Assert.Throws<InvalidOperationException>(() => konto.Wyplata(200));
         }
@@ -42,6 +42,32 @@
             Konto konto = new Konto("Jan Kowalski", 100);
             konto.BlokujKonto();
             Assert.Throws<InvalidOperationException>(() => konto.Wyplata(50));
+        }
+
+        [TestMethod]
+        public void Wyplata_Debet()
+        {
+            KontoPlus konto = new KontoPlus("Jan Kowalski", 100, 200);
+
+            konto.Wyplata(250);
+
+            Assert.IsTrue(konto.Zablokowane);
+        }
+
+        [TestMethod]
+        public void Wyplata_Przekracza_Limit_Debetowy()
+        {
+            KontoPlus konto = new KontoPlus("Jan Kowalski", 100, 200);
+            Assert.Throws<InvalidOperationException>(() => konto.Wyplata(400));
+        }
+
+        [TestMethod]
+        public void Wplata_Odblokowuje_Konto()
+        {
+            KontoPlus konto = new KontoPlus("Jan Kowalski", 100, 200);
+            konto.Wyplata(250);
+            konto.Wplata(200);
+            Assert.IsFalse(konto.Zablokowane);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Bank
     public class Konto
     {
         private string klient;
-        private decimal bilans;
+        protected decimal bilans;
         private bool zablokowane = false;
 
         public Konto(string klient, decimal bilansNaStart = 0)
@@ -20,7 +20,7 @@ namespace Bank
             get { return klient; }
         }
 
-        public decimal Bilans
+        public virtual decimal Bilans
         {
             get { return bilans; }
         }
@@ -30,7 +30,7 @@ namespace Bank
             get { return zablokowane; }
         }
 
-        public void Wplata(decimal kwota)
+        public virtual void Wplata(decimal kwota)
         {
             if (zablokowane)
             {
@@ -45,7 +45,7 @@ namespace Bank
             bilans += kwota;
         }
 
-        public void Wyplata(decimal kwota)
+        public virtual void Wyplata(decimal kwota)
         {
             if (zablokowane)
             {
