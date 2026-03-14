@@ -69,5 +69,28 @@
             konto.Wplata(200);
             Assert.IsFalse(konto.Zablokowane);
         }
+
+        [TestMethod]
+        public void Wplata_Powieksza_Bilans_KontoLimit()
+        {
+            KontoLimit konto = new KontoLimit("Jan Kowalski", 100, 200);
+            konto.Wplata(50);
+            Assert.AreEqual(350, konto.Bilans);
+        }
+
+        [TestMethod]
+        public void Wyplata_W_Limit()
+        {
+            KontoLimit konto = new KontoLimit("Jan Kowalski", 100, 200);
+            konto.Wyplata(250);
+            Assert.IsTrue(konto.Zablokowane);
+        }
+
+        [TestMethod]
+        public void Wyplata_Przekracza_Limit()
+        {
+            KontoLimit konto = new KontoLimit("Jan Kowalski", 100, 200);
+            Assert.Throws<InvalidOperationException>(() => konto.Wyplata(400));
+        }
     }
 }
