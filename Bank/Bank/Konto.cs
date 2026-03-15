@@ -71,5 +71,16 @@ namespace Bank
         {
             zablokowane = false;
         }
+
+        //krok 5
+        public KontoPlus NaKontoPlus(decimal limit)
+        {
+            return new KontoPlus(this.Nazwa, this.Bilans, limit);
+        }
+
+        public KontoLimit NaKontoLimit(decimal limit)
+        {
+            return new KontoLimit(this.Nazwa, this.Bilans, limit);
+        }
     }
 }

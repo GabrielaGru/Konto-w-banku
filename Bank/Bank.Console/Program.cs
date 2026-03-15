@@ -43,6 +43,24 @@ class   Program
         Console.WriteLine("Bilans po wpłacie: " + kontoLimit.Bilans);
         Console.WriteLine("Czy konto jest zablokowane: " + kontoLimit.Zablokowane);
 
+        Console.WriteLine("\nKonwersje");
+
+        Konto molenda = new Konto("Marek Molenda", 100);
+
+        Console.WriteLine("Bilans na koncie podstawowym: " + molenda.Bilans);
+
+        KontoPlus molendaPlus = molenda.NaKontoPlus(200);
+        Console.WriteLine("Bilans na koncie Plus: " + molendaPlus.Bilans);
+
+        Konto zwykle = molendaPlus.NaKonto();
+        Console.WriteLine("Powrót do Konto: " + zwykle.Bilans);
+
+        KontoLimit molendaLimit = molenda.NaKontoLimit(300);
+        Console.WriteLine("Bilans na koncie Limit: " + molendaLimit.Bilans);
+
+        Konto powrotZLimitu = molendaLimit.NaKonto();
+        Console.WriteLine("Powrót do Konto: " + powrotZLimitu.Bilans);
+
         Console.WriteLine("\nKoniec");
     }
 }

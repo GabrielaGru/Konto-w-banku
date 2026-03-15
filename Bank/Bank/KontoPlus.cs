@@ -66,5 +66,11 @@ namespace Bank
             if (bilans > 0 && Zablokowane)
                 OdblokujKonto();
         }
+
+        //krok 5
+        public Konto NaKonto()
+        {
+            return new Konto(this.Nazwa, this.bilans);
+        }
     }
 }

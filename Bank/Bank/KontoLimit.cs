@@ -108,5 +108,11 @@ namespace Bank
                 konto.BlokujKonto();
             }
         }
+        
+        //krok 5
+        public Konto NaKonto()
+        {
+            return new Konto(this.Nazwa, konto.Bilans - debet);
+        }
     }
 }
