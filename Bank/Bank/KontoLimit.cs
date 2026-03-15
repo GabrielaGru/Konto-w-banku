@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Bank
@@ -8,6 +9,7 @@ namespace Bank
     {
         private Konto konto;
         private decimal limit;
+        private decimal debet = 0;
         private bool debetUzyty = false;
 
         public KontoLimit(string klient, decimal bilansNaStart, decimal limit)
@@ -28,7 +30,7 @@ namespace Bank
 
         public decimal Bilans
         {
-            get { return konto.Bilans + limit; }
+            get { return konto.Bilans - debet + limit; }
 
         }
 
@@ -47,14 +49,29 @@ namespace Bank
         }
 
         public void Wplata(decimal kwota)
-        { 
-            konto.Wplata(kwota);
+        {
+            if (kwota <= 0)
+                throw new ArgumentException("Kwota musi być większa od zera");
 
-            if (konto.Bilans > 0 && konto.Zablokowane)
+            if (debet > 0)
             {
-                konto.OdblokujKonto();
-                debetUzyty = false;
+                if (kwota >= debet)
+                {
+                    kwota -= debet;
+                    debet = 0;
+
+                    if (konto.Zablokowane)
+                        konto.OdblokujKonto();
+                }
+                else
+                {
+                    debet -= kwota;
+                    return;
+                }
             }
+
+            if (kwota > 0)
+                konto.Wplata(kwota);
         }
 
         public void Wyplata(decimal kwota)
@@ -82,11 +99,12 @@ namespace Bank
             }
             else
             {
-                decimal doWyzerowania = konto.Bilans;
+                decimal brakujace = kwota - konto.Bilans;
 
-                if (doWyzerowania > 0)
-                    konto.Wyplata(doWyzerowania);
+                if (konto.Bilans > 0)
+                    konto.Wyplata(konto.Bilans);
 
+                debet = brakujace;
                 konto.BlokujKonto();
             }
         }
